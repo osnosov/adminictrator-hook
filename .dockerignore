@@ -1,0 +1,12 @@
+node_modules
+Dockerfile*
+docker-compose*
+.git
+.vscode
+.gitignore
+.dockerignore
+.eslintignore
+.eslintrc
+.prettierrc
+README.md
+LICENSE

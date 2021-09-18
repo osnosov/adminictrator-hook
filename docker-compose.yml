@@ -1,0 +1,60 @@
+version: '3'
+
+networks:
+  nginx-proxy:
+    external:
+      name: nginx-proxy
+
+services:
+  bot-hook:
+    container_name: bot-hook-to-amqp
+    build: .
+    restart: unless-stopped
+    #    expose:
+    #      - '${PORT}'
+    #    ports:
+    #      - '${PORT}:${PORT}'
+    environment:
+      - 'PORT=${PORT}'
+      - 'HOST=${HOST}'
+      - 'REDIS_HOST=${REDIS_HOST}'
+      - 'REDIS_PORT=${REDIS_PORT}'
+      - 'REDIS_PASSWORD=${REDIS_PASSWORD}'
+      - 'DB_HOST=${DB_HOST}'
+      - 'DB_PORT=${DB_PORT}'
+      - 'DB_DATABASE=${DB_DATABASE}'
+      - 'DB_USER=${DB_USER}'
+      - 'DB_PASSWORD=${DB_PASSWORD}'
+      - 'DB_SSLMODE=${DB_SSLMODE}'
+      - 'AMQP_HOST=${AMQP_HOST}'
+      - 'QUEUE_BOT=${QUEUE_BOT}'
+      - 'LOCAL_BUFFER_SIZE=${LOCAL_BUFFER_SIZE}'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '200k'
+        max-file: '10'
+    networks:
+      - nginx-proxy
+
+  nginx-hook:
+    image: nginx:alpine
+    container_name: nginx-bot-hook-to-amqp
+    restart: unless-stopped
+    depends_on:
+      - bot-hook
+    links:
+      - bot-hook
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    environment:
+      - 'VIRTUAL_HOST=${VIRTUAL_HOST}'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '200k'
+        max-file: '10'
+    networks:
+      - nginx-proxy

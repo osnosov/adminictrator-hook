@@ -1,0 +1,58 @@
+{
+  "name": "bot-hook-to-amqp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "format": "prettier --write .",
+    "lint": "eslint --ext .js, --ignore-path .gitignore .",
+    "lintfix": "eslint --fix --ext .js, --ignore-path .gitignore ."
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "keywords": [],
+  "author": "Oleg Nosov <nosovoleg@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osnosov/bot-hook-to-amqp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/osnosov/bot-hook-to-amqp/issues"
+  },
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "ajv": "^8.6.3",
+    "ajv-errors": "^3.0.0",
+    "amqp-connection-manager": "^3.6.0",
+    "amqplib": "^0.8.0",
+    "desm": "^1.2.0",
+    "dotenv": "^10.0.0",
+    "fastify": "^3.21.1",
+    "fastify-autoload": "^3.9.0",
+    "fastify-redis": "^4.3.1",
+    "ioredis": "^4.27.9",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.4.0"
+  }
+}
