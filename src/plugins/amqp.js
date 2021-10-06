@@ -5,7 +5,7 @@ export default fp(async server => {
   const connection = amqpcm.connect(server.config.amqpHost)
 
   const channel = connection.createChannel({
-    json: true,
+    json: false,
     setup: channel => channel.assertQueue(server.config.queueBot, { durable: true })
   })
 
@@ -15,7 +15,8 @@ export default fp(async server => {
     if (!connection.isConnected()) {
       throw new Error('AMQP server disconected -> Message not sent')
     }
-    await channel.sendToQueue(server.config.queueBot, data)
+    const buffer = Buffer.from(JSON.stringify(data))
+    await channel.sendToQueue(server.config.queueBot, buffer)
   }
 
   const amqp = {

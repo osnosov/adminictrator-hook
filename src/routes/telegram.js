@@ -35,7 +35,10 @@ export default async function (server, opts, next) {
       })
     }
 
-    await server.amqp.sendToQueue({ bot: 'telegram', bot_id: bot.id, body })
+    await server.amqp.sendToQueue({
+      pattern: 'telegram',
+      data: { bot_id: bot.id, bot_hook: body }
+    })
 
     reply.send({
       message: 'Success',

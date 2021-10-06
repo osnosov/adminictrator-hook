@@ -35,7 +35,10 @@ export default async function (server, opts, next) {
       })
     }
 
-    await server.amqp.sendToQueue({ bot: 'messenger', bot_id: bot.id, body })
+    await server.amqp.sendToQueue({
+      pattern: 'messenger',
+      data: { bot_id: bot.id, bot_hook: body }
+    })
 
     reply.send({
       message: 'Success',
@@ -69,7 +72,10 @@ export default async function (server, opts, next) {
     if (mode && token) {
       // Checking correct mode и token
       if (mode === 'subscribe' && token === bot.verify_token) {
-        await server.amqp.sendToQueue({ bot: 'messenger', bot_id: bot.id, mode })
+        await server.amqp.sendToQueue({
+          pattern: 'messenger',
+          data: { bot_id: bot.id, bot_mode: mode }
+        })
 
         // response challenge
         reply.code(200).send(challenge)
