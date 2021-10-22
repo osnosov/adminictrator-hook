@@ -9,9 +9,9 @@ export default fp(async server => {
     password: server.config.dbPassword,
     port: server.config.dbPort,
     sslmode: server.config.dbSslmode,
-    ssl: {
-      rejectUnauthorized: false
-    },
+    // ssl: {
+    //   rejectUnauthorized: false
+    // },
     min: 2,
     max: 3
   }
