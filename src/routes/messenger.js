@@ -1,9 +1,9 @@
 export default async function (server, opts, next) {
   const params = {
     type: 'object',
-    required: ['botHook'],
+    required: ['hook'],
     properties: {
-      botHook: {
+      hook: {
         type: 'string',
         format: 'uuid'
       }
@@ -17,15 +17,15 @@ export default async function (server, opts, next) {
     // headers
   }
 
-  server.post('/messenger/:botHook', { schema }, async (request, reply) => {
+  server.post('/messenger/:hook', { schema }, async (request, reply) => {
     const {
       body,
-      params: { botHook },
+      params: { hook },
       method,
       url
     } = request
 
-    let bot = await server.hooks.checkHooks(botHook)
+    let bot = await server.hooks.checkHooks(hook)
 
     if (!bot) {
       reply.code(404).send({
@@ -36,8 +36,8 @@ export default async function (server, opts, next) {
     }
 
     await server.amqp.sendToQueue({
-      pattern: 'messenger',
-      data: { bot_id: bot.id, bot_hook: body }
+      pattern: 'fromMessenger',
+      data: { bot_id: bot.id, bot_hook: hook, bot_data: body }
     })
 
     reply.send({
@@ -46,15 +46,15 @@ export default async function (server, opts, next) {
     })
   })
 
-  server.get('/messenger/:botHook', async (request, reply) => {
+  server.get('/messenger/:hook', async (request, reply) => {
     const {
-      params: { botHook },
+      params: { hook },
       query,
       method,
       url
     } = request
 
-    let bot = await server.hooks.checkHooks(botHook)
+    let bot = await server.hooks.checkHooks(hook)
 
     if (!bot) {
       reply.code(404).send({
@@ -73,8 +73,8 @@ export default async function (server, opts, next) {
       // Checking correct mode и token
       if (mode === 'subscribe' && token === bot.verify_token) {
         await server.amqp.sendToQueue({
-          pattern: 'messenger',
-          data: { bot_id: bot.id, bot_mode: mode }
+          pattern: 'fromMessenger',
+          data: { bot_id: bot.id, bot_hook: hook, bot_mode: mode }
         })
 
         // response challenge

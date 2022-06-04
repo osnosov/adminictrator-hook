@@ -1,9 +1,9 @@
 export default async function (server, opts, next) {
   const params = {
     type: 'object',
-    required: ['botHook'],
+    required: ['hook'],
     properties: {
-      botHook: {
+      hook: {
         type: 'string',
         format: 'uuid'
       }
@@ -17,16 +17,16 @@ export default async function (server, opts, next) {
     // headers
   }
 
-  server.post('/viber/:botHook', { schema }, async (request, reply) => {
+  server.post('/viber/:hook', { schema }, async (request, reply) => {
     const {
       headers,
       body,
-      params: { botHook },
+      params: { hook },
       method,
       url
     } = request
 
-    let bot = await server.hooks.checkHooks(botHook)
+    let bot = await server.hooks.checkHooks(hook)
 
     if (!bot) {
       reply.code(404).send({
@@ -39,8 +39,8 @@ export default async function (server, opts, next) {
     const signature = headers['x-viber-content-signature']
 
     await server.amqp.sendToQueue({
-      pattern: 'viber',
-      data: { bot_id: bot.id, signature, bot_hook: body }
+      pattern: 'fromViber',
+      data: { bot_id: bot.id, bot_hook: hook, signature, bot_data: body }
     })
 
     return {

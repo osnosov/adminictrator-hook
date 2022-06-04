@@ -1,9 +1,9 @@
 export default async function (server, opts, next) {
   const params = {
     type: 'object',
-    required: ['botHook'],
+    required: ['hook'],
     properties: {
-      botHook: {
+      hook: {
         type: 'string',
         format: 'uuid'
       }
@@ -17,15 +17,15 @@ export default async function (server, opts, next) {
     // headers
   }
 
-  server.post('/telegram/:botHook', { schema }, async (request, reply) => {
+  server.post('/telegram/:hook', { schema }, async (request, reply) => {
     const {
       body,
-      params: { botHook },
+      params: { hook },
       method,
       url
     } = request
 
-    let bot = await server.hooks.checkHooks(botHook)
+    let bot = await server.hooks.checkHooks(hook)
 
     if (!bot) {
       reply.code(404).send({
@@ -36,8 +36,8 @@ export default async function (server, opts, next) {
     }
 
     await server.amqp.sendToQueue({
-      pattern: 'telegram',
-      data: { bot_id: bot.id, bot_hook: body }
+      pattern: 'fromTelegram',
+      data: { bot_id: bot.id, bot_hook: hook, bot_data: body }
     })
 
     reply.send({
