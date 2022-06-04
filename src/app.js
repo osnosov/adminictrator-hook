@@ -4,9 +4,10 @@ config()
 import Fastify from 'fastify'
 import AutoLoad from 'fastify-autoload'
 import { join } from 'desm'
+import amqp from './plugins/amqp.js'
 
 const server = Fastify({
-  // logger: true
+  logger: false
 })
 
 export const app = async () => {
@@ -17,9 +18,10 @@ export const app = async () => {
     })
 
     // auto register all plugins
-    await server.register(AutoLoad, {
-      dir: join(import.meta.url, 'plugins')
-    })
+    // await server.register(AutoLoad, {
+    //   dir: join(import.meta.url, 'plugins')
+    // })
+    await server.register(amqp)
 
     // auto register all services
     await server.register(AutoLoad, {

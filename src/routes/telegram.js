@@ -25,7 +25,7 @@ export default async function (server, opts, next) {
       url
     } = request
 
-    let bot = await server.hooks.checkHooks(hook)
+    const bot = await server.hooks.checkHooks(hook)
 
     if (!bot) {
       reply.code(404).send({
@@ -37,7 +37,11 @@ export default async function (server, opts, next) {
 
     await server.amqp.sendToQueue(server.config.fromTelegramQueueBot, {
       pattern: 'fromTelegram',
-      data: { bot_id: bot.id, bot_hook: hook, bot_data: body }
+      data: {
+        // bot_id: bot.id,
+        bot_hook: hook,
+        bot_data: body
+      }
     })
 
     reply.send({

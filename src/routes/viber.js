@@ -26,7 +26,7 @@ export default async function (server, opts, next) {
       url
     } = request
 
-    let bot = await server.hooks.checkHooks(hook)
+    const bot = await server.hooks.checkHooks(hook)
 
     if (!bot) {
       reply.code(404).send({
@@ -40,7 +40,12 @@ export default async function (server, opts, next) {
 
     await server.amqp.sendToQueue(server.config.fromViberQueueBot, {
       pattern: 'fromViber',
-      data: { bot_id: bot.id, bot_hook: hook, signature, bot_data: body }
+      data: {
+        // bot_id: bot.id,
+        bot_hook: hook,
+        signature,
+        bot_data: body
+      }
     })
 
     return {
