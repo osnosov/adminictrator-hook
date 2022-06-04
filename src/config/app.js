@@ -19,7 +19,9 @@ export default fp(async server => {
 
   // config RabbitMQ
   const amqpHost = process.env.AMQP_HOST || 'amqp://admin:admin@localhost:5672'
-  const queueBot = process.env.QUEUE_BOT || 'bot'
+  const fromTelegramQueueBot = process.env.FROM_TELEGRAM_QUEUE_BOT || 'fromTelegram'
+  const fromMessengerQueueBot = process.env.FROM_MESSENGER_QUEUE_BOT || 'fromMessenger'
+  const fromViberQueueBot = process.env.FROM_VIBER_QUEUE_BOT || 'fromViber'
 
   // Config Local buffer
   const localBufferSize = process.env.LOCAL_BUFFER_SIZE || 8
@@ -39,7 +41,9 @@ export default fp(async server => {
     redisPassword,
     redisExpiretime,
     amqpHost,
-    queueBot,
+    fromTelegramQueueBot,
+    fromMessengerQueueBot,
+    fromViberQueueBot,
     localBufferSize,
     localExpiretime
   }

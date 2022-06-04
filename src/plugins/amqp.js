@@ -4,19 +4,25 @@ import amqpcm from 'amqp-connection-manager'
 export default fp(async server => {
   const connection = amqpcm.connect(server.config.amqpHost)
 
-  const channel = connection.createChannel({
+  const channel = await connection.createChannel({
     json: false,
-    setup: channel => channel.assertQueue(server.config.queueBot, { durable: true })
+    setup: async channel => {
+      return await Promise.all([
+        channel.assertQueue(server.config.fromTelegramQueueBot, { durable: true }),
+        channel.assertQueue(server.config.fromMessengerQueueBot, { durable: true }),
+        channel.assertQueue(server.config.fromViberQueueBot, { durable: true })
+      ])
+    }
   })
 
   channel.waitForConnect()
 
-  const sendToQueue = async data => {
+  const sendToQueue = async (queue, data) => {
     if (!connection.isConnected()) {
       throw new Error('AMQP server disconected -> Message not sent')
     }
     const buffer = Buffer.from(JSON.stringify(data))
-    await channel.sendToQueue(server.config.queueBot, buffer)
+    await channel.sendToQueue(queue, buffer)
   }
 
   const amqp = {
