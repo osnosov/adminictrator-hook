@@ -38,7 +38,7 @@ export default async function (server, opts, next) {
 
     const signature = headers['x-viber-content-signature']
 
-    await server.amqp.sendToQueue(server.config.fromViberQueueBot, {
+    await server.amqpProduce.produce(server.config.fromViberQueueBot, {
       pattern: 'fromViber',
       data: {
         // bot_id: bot.id,

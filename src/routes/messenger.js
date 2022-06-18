@@ -35,7 +35,7 @@ export default async function (server, opts, next) {
       })
     }
 
-    await server.amqp.sendToQueue(server.config.fromMessengerQueueBot, {
+    await server.amqpProduce.produce(server.config.fromMessengerQueueBot, {
       pattern: 'fromMessenger',
       data: {
         // bot_id: bot.id,
@@ -76,7 +76,7 @@ export default async function (server, opts, next) {
     if (mode && token) {
       // Checking correct mode и token
       if (mode === 'subscribe' && token === bot.verify_token) {
-        await server.amqp.sendToQueue(server.config.fromMessengerQueueBot, {
+        await server.amqpProduce.produce(server.config.fromMessengerQueueBot, {
           pattern: 'fromMessenger',
           data: {
             // bot_id: bot.id,

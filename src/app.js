@@ -4,39 +4,34 @@ config()
 import Fastify from 'fastify'
 import AutoLoad from 'fastify-autoload'
 import { join } from 'desm'
-import amqp from './plugins/amqp.js'
+import amqpProduce from './plugins/amqpProduce.js'
+// import amqpConsume from './plugins/amqpConsume.js'
 
-const server = Fastify({
-  logger: false
-})
+const server = Fastify({ logger: false })
 
 export const app = async () => {
-  try {
-    // auto register all config
-    await server.register(AutoLoad, {
-      dir: join(import.meta.url, 'config')
-    })
+  await server.register(AutoLoad, { dir: join(import.meta.url, 'config') })
+  // server.register(AutoLoad, { dir: join(import.meta.url, 'plugins') })
+  await server.register(amqpProduce)
+  // await server.register(amqpConsume)
+  await server.register(AutoLoad, { dir: join(import.meta.url, 'services') })
+  await server.register(AutoLoad, { dir: join(import.meta.url, 'routes') })
 
-    // auto register all plugins
-    // await server.register(AutoLoad, {
-    //   dir: join(import.meta.url, 'plugins')
-    // })
-    await server.register(amqp)
+  // const consumeEmmitter = await server.amqpConsume.consume()
+  // consumeEmmitter.on('data', (message, ack) => {
+  //   console.error('consumeData', message)
+  //   ack()
+  // })
 
-    // auto register all services
-    await server.register(AutoLoad, {
-      dir: join(import.meta.url, 'services')
-    })
+  server.listen(process.env.PORT || 3000, process.env.HOST || '0.0.0.0', async err => {
+    if (err) {
+      server.log.error(err)
+      process.exit(1)
+    }
 
-    // auto register all routes
-    await server.register(AutoLoad, {
-      dir: join(import.meta.url, 'routes')
-    })
-
-    // start server
-    await server.listen(server.config.port, server.config.host)
-  } catch (err) {
-    server.log.error(err)
-    process.exit(1)
-  }
+    console.log(process.env.PORT || 3000, process.env.HOST || '0.0.0.0')
+    if (process.env.NODE_ENV === 'development') {
+      console.log(server.printRoutes())
+    }
+  })
 }
