@@ -9,7 +9,7 @@ Configure and run [nginx-proxy](https://github.com/osnosov/nginx-proxyy)
 Download
 
 ```console
-git clone https://github.com/osnosov/bot-hook-to-amqp
+git clone https://github.com/osnosov/adminictrator-hook
 ```
 
 ```console

@@ -1,5 +1,5 @@
 {
-  "name": "bot-hook-to-amqp",
+  "name": "adminictrator-hook",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -25,10 +25,10 @@
   "author": "Oleg Nosov <nosovoleg@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osnosov/bot-hook-to-amqp.git"
+    "url": "git+https://github.com/osnosov/adminictrator-hook.git"
   },
   "bugs": {
-    "url": "https://github.com/osnosov/bot-hook-to-amqp/issues"
+    "url": "https://github.com/osnosov/adminictrator-hook/issues"
   },
   "license": "MIT",
   "type": "module",
