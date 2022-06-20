@@ -1,5 +1,5 @@
 {
-  "name": "adminictrator-hook",
+  "name": "administrator-hook",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -25,10 +25,10 @@
   "author": "Nosov Oleg <nosovoleg@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osnosov/adminictrator-hook.git"
+    "url": "git+https://github.com/osnosov/administrator-hook.git"
   },
   "bugs": {
-    "url": "https://github.com/osnosov/adminictrator-hook/issues"
+    "url": "https://github.com/osnosov/administrator-hook/issues"
   },
   "license": "MIT",
   "type": "module",

@@ -1,9 +1,9 @@
 version: '3.4'
 
 services:
-  adminictrator-hook:
-    container_name: adminictrator-hook
-    image: adminictrator-hook:1.0.0
+  administrator-hook:
+    container_name: administrator-hook
+    image: administrator-hook:1.0.0
     build:
       context: ./
       dockerfile: ./Dockerfile
@@ -39,12 +39,12 @@ services:
 
   nginx-hook:
     image: nginx:alpine
-    container_name: nginx-adminictrator-hook
+    container_name: nginx-administrator-hook
     restart: unless-stopped
     depends_on:
-      - adminictrator-hook
+      - administrator-hook
     links:
-      - adminictrator-hook
+      - administrator-hook
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/conf.d:/etc/nginx/conf.d

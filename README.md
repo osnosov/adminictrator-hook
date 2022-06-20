@@ -9,11 +9,11 @@ Configure and run [nginx-proxy](https://github.com/osnosov/nginx-proxyy)
 Download
 
 ```console
-git clone https://github.com/osnosov/adminictrator-hook
+git clone https://github.com/osnosov/administrator-hook
 ```
 
 ```console
-cd adminictrator-hook
+cd administrator-hook
 ```
 
 Copy .env.example file
