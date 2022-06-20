@@ -13,7 +13,7 @@ git clone https://github.com/osnosov/adminictrator-hook
 ```
 
 ```console
-cd bot-hook-to-amqp
+cd adminictrator-hook
 ```
 
 Copy .env.example file

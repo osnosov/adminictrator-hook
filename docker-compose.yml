@@ -1,14 +1,13 @@
-version: '3'
-
-networks:
-  nginx-proxy:
-    external:
-      name: nginx-proxy
+version: '3.4'
 
 services:
-  bot-hook:
-    container_name: bot-hook-to-amqp
-    build: .
+  adminictrator-hook:
+    container_name: adminictrator-hook
+    image: adminictrator-hook:1.0.0
+    build:
+      context: ./
+      target: production
+      dockerfile: ./Dockerfile
     restart: unless-stopped
     #    expose:
     #      - '${PORT}'
@@ -41,12 +40,12 @@ services:
 
   nginx-hook:
     image: nginx:alpine
-    container_name: nginx-bot-hook-to-amqp
+    container_name: nginx-adminictrator-hook
     restart: unless-stopped
     depends_on:
-      - bot-hook
+      - adminictrator-hook
     links:
-      - bot-hook
+      - adminictrator-hook
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/conf.d:/etc/nginx/conf.d
@@ -60,3 +59,8 @@ services:
         max-file: '10'
     networks:
       - nginx-proxy
+
+networks:
+  nginx-proxy:
+    external:
+      name: nginx-proxy
