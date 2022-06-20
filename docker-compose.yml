@@ -6,7 +6,6 @@ services:
     image: adminictrator-hook:1.0.0
     build:
       context: ./
-      target: production
       dockerfile: ./Dockerfile
     restart: unless-stopped
     #    expose:
